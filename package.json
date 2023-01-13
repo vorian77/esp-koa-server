@@ -1,0 +1,19 @@
+{
+  "name": "esp-koa-server",
+  "version": "0.1.0",
+  "description": "KidSmart Software ESP internet API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vorian77/esp-koa-server.git"
+  },
+  "author": "Phyllip Hall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vorian77/esp-koa-server/issues"
+  },
+  "homepage": "https://github.com/vorian77/esp-koa-server#readme"
+}
