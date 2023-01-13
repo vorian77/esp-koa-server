@@ -4,7 +4,7 @@
   "description": "KidSmart Software ESP internet API",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -12,6 +12,22 @@
   },
   "author": "Phyllip Hall",
   "license": "MIT",
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@sendgrid/mail": "^7.7.0",
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.3",
+    "koa": "^2.14.1",
+    "koa-body": "^6.0.1",
+    "koa-compose": "^4.1.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^12.0.0",
+    "qs": "^6.11.0",
+    "twilio": "^3.84.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
   "bugs": {
     "url": "https://github.com/vorian77/esp-koa-server/issues"
   },

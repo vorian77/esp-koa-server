@@ -1,3 +1,14 @@
+# folders
+certificates
+exe
+node_modules
+
+# files
+.env
+app.exe
+app_sandbox.js
+esp_api_log.txt
+
 # Logs
 logs
 *.log
