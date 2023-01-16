@@ -14,12 +14,6 @@ const sendEmail = async function(ctx) {
       html: ctx.query.emailBody
     };
 
-    // temp
-    console.log('SendEmail.temp...');
-    console.log(msg);
-    ctx.body = msg;
-    return;
-
     // send
     try {
       const response = await sgMail.send(msg);

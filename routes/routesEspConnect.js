@@ -16,7 +16,6 @@ async function transmit(ctx) {
     const options = {
       method: ctx.request.method,
       url: ctx.espDbUrl + ctx.path,
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
       data: qs.stringify(ctx.query)
     };
       
@@ -25,9 +24,14 @@ async function transmit(ctx) {
       console.log(`${functionNameError}.Axios.options...`, options);
       const rtn = await axios(options);
       console.log(`${functionNameError}.Axios request was successful.`)
-      ctx.body = Array.isArray(rtn.data) ? rtn.data[0] : rtn.data;
-      ctx.status = rtn.status;
+    if (Array.isArray(rtn.data)) {
+        ctx.body = (rtn.data.length == 1) ? rtn.data[0] : rtn.data;
+      } else {
+        ctx.body = rtn.data
+      } 
 
+      ctx.status = rtn.status
+        
     } catch(err) {
       console.log(`${functionNameError}.Axios.error...`)
       body = JSON.stringify(err.response.data) || err.response.statusText || err.message;

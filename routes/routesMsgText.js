@@ -23,10 +23,10 @@ const sendText = async function(ctx) {
 
     const twilio = new Twilio(accountSid, authToken);
     
-    // temp
-    console.log('temp: sendText: ', ctx.query.body);
-    ctx.body = ctx.query.body;
-    return;
+    // // temp
+    // console.log('temp: sendText: ', ctx.query.body);
+    // ctx.body = ctx.query.body;
+    // return;
 
     // parms
     const parms = {
