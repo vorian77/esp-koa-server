@@ -13,11 +13,17 @@ async function transmit(ctx) {
 
   try {
     // set HTTP options
-    const options = {
-      method: ctx.request.method,
-      url: ctx.espDbUrl + ctx.path,
-      data: qs.stringify(ctx.query)
-    };
+    let options;
+    const url = ctx.espDbUrl + ctx.path;
+    const queryParms = qs.stringify(ctx.query);
+    switch(ctx.request.method.toLowerCase()) {
+      case 'get':
+        options = { method: ctx.request.method, url: url + '?' + queryParms }
+        break;
+
+      default:
+        options = { method: ctx.request.method, url, data: queryParms }
+    }
       
     // execute HTTP
     try {
