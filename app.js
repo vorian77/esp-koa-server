@@ -12,8 +12,9 @@ const https = require('https');
 const path = require('path');
 require('dotenv').config({ path: path.join(process.cwd(), '.env')});
 
-// custom routes
+// resources - application
 const { apiRouter } = require('./routes/routes.js');
+const { logger } = require('./features/logger.js');
 
 // app
 const app = new Koa();
@@ -43,10 +44,8 @@ https
 
 function logStart() {
   const runtimeDir = process.cwd();
-  const startMsg = `ESP-API started: ${new Date()} - Run time directory: ${runtimeDir}\r\n`;
-  const logFile = path.join(runtimeDir, 'esp_api_log.txt');
-  console.log(startMsg);
-  fs.appendFile(logFile, startMsg, function (err) { if (err) throw err; });
+  const startMsg = `ESP-API started - Run time directory: ${runtimeDir}\r\n`;
+  logger(startMsg);
 };
 
 // error handler for all processing within app
