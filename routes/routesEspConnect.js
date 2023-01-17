@@ -1,6 +1,8 @@
 const axios = require('axios');    
 const qs = require('qs'); 
 
+const { logger } = require('../features/logger.js');
+
 async function espConnect(ctx) {
   await setPath(ctx);
   await encryptPassword(ctx);
@@ -24,6 +26,7 @@ async function transmit(ctx) {
       default:
         options = { method: ctx.request.method, url, data: queryParms }
     }
+    logger(JSON.stringify(options));
       
     // execute HTTP
     try {
