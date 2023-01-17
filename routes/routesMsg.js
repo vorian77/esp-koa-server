@@ -8,6 +8,6 @@ const msgRouter = new Router({ prefix: '/send' });
 
 msgRouter.all('/text', async (ctx) => { await sendText(ctx); });
 msgRouter.all('/email', async (ctx) => { await sendEmail(ctx); });
-msgRouter.all('/emailAlert', async (ctx) => { await sendEmailAlert(ctx); });
+msgRouter.all('/email_alert', async (ctx) => { await sendEmailAlert(ctx); });
 
 exports.msgRouter = msgRouter;

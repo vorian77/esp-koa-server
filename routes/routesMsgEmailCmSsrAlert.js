@@ -1,6 +1,10 @@
 const { espConnect } = require('./routesEspConnect.js');
 const { sendEmail } = require('./routesMsgEmail.js');
 
+// expected input parms
+// ctx.query.applicantId
+// ctx.query.alertType
+
 const sendEmailAlert = async function(ctx) {
   await getApplicantData(ctx);
   await setEmailContent(ctx);
@@ -19,9 +23,9 @@ const getApplicantData = async function(ctx) {
 
 const setEmailContent = async function(ctx) {
   const applicantName = ctx.query.applicantName;
-  const emailType = ctx.query.alertEmailType;
-  ctx.query.emailSubject = 'KidSmart - New Self-Service App Upload - ' + emailType + ' (' + applicantName + ')';
-  ctx.query.emailBody = '<!DOCTYPE html> <html> <body> <h3>Please check CaseManager for a new self-service registration app upload:</h3> <p><b>Upload Type:</b> ' + emailType + '</p> <p><b>Applicant:</b> ' + applicantName + '</p>' + '</p> </body> </html>';
+  const alertType = ctx.query.alertType;
+  ctx.query.emailSubject = 'KidSmart - New Self-Service App Upload - ' + alertType + ' (' + applicantName + ')';
+  ctx.query.emailBody = '<!DOCTYPE html> <html> <body> <h3>Please check CaseManager for a new self-service registration app upload:</h3> <p><b>Upload Type:</b> ' + alertType + '</p> <p><b>Applicant:</b> ' + applicantName + '</p>' + '</p> </body> </html>';
 }
 
 const sendAlertEmail = async function(ctx) {
