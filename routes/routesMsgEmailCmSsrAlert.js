@@ -24,8 +24,14 @@ const getApplicantData = async function(ctx) {
 const setEmailContent = async function(ctx) {
   const applicantName = ctx.query.applicantName;
   const alertType = ctx.query.alertType;
+  const content = ctx.query.content;
+
   ctx.query.emailSubject = 'KidSmart - New Self-Service App Upload - ' + alertType + ' (' + applicantName + ')';
-  ctx.query.emailBody = '<!DOCTYPE html> <html> <body> <h3>Please check CaseManager for a new self-service registration app upload:</h3> <p><b>Upload Type:</b> ' + alertType + '</p> <p><b>Applicant:</b> ' + applicantName + '</p>' + '</p> </body> </html>';
+  ctx.query.emailBody = '<h3>Please check CaseManager for a new self-service registration app upload:</h3>' + 
+    '<p><b>Applicant:</b> ' + applicantName + '</p>' + 
+    '<p><b>Upload Type:</b> ' + alertType + '</p>' ;
+  if (content) { ctx.query.emailBody += '<p></p><p><b>Message Content: </b>' + content + '</p>' };
+  ctx.query.emailBody = '<!DOCTYPE html> <html> <body>' +  ctx.query.emailBody + '</body> </html>';
 }
 
 const sendAlertEmail = async function(ctx) {
