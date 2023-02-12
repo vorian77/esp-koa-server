@@ -32,7 +32,8 @@ const sendText = async function(ctx) {
     const parms = {
       from: phoneNbrFrom,
       to: ctx.query.phoneNbrTo,
-      body: ctx.query.body
+      body: ctx.query.body,
+      statusCallback: 'https://esp1.kssc.com:3000/api/send/text_status'
     };
 
     try {
