@@ -1,7 +1,5 @@
 "use strict";
 
-const port = 3000;
-
 // resources - koa
 const Koa = require('koa');
 const cors = require('@koa/cors');
@@ -29,6 +27,7 @@ app
   .use(apiRouter.allowedMethods);
    
 //environment parms
+const HTTPS_PORT = process.env.HTTPS_PORT
 const HTTPS_CERT = process.env.HTTPS_CERT
 const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
 app.context.espDbUrl = process.env.ESP_DB_URL
@@ -42,11 +41,11 @@ var options = {
 // listener
 https
   .createServer(options, app.callback())
-  .listen(port, logStart(port));
+  .listen(HTTPS_PORT, logStart(HTTPS_PORT));
 
-function logStart(port) {
+function logStart(HTTPS_PORT) {
   const runtimeDir = process.cwd();
-  const startMsg = `ESP-API started - Port: ${port} - Run time directory: ${runtimeDir}\r\n`;
+  const startMsg = `ESP-API started - Port: ${HTTPS_PORT} - Run time directory: ${runtimeDir}\r\n`;
   logger(startMsg);
 };
 

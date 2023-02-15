@@ -5,7 +5,8 @@ const sendText = async function(ctx) {
   let status, body;
 
   try { 
-    // parms - production
+    // environmental parms
+    const HTTPS_PORT = process.env.HTTPS_PORT
     const accountSid = process.env.TWILIO_ACCT_SID;
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const phoneNbrFrom = process.env.TWIIO_PHONE_NBR;
@@ -33,7 +34,7 @@ const sendText = async function(ctx) {
       from: phoneNbrFrom,
       to: ctx.query.phoneNbrTo,
       body: ctx.query.body,
-      statusCallback: 'https://esp1.kssc.com:3000/api/send/text_status'
+      statusCallback: `https://esp1.kssc.com:${HTTPS_PORT}/api/send/text_status`
     };
 
     try {
