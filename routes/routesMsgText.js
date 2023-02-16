@@ -34,6 +34,7 @@ const sendText = async function(ctx) {
       from: phoneNbrFrom,
       to: ctx.query.phoneNbrTo,
       body: ctx.query.body,
+      MaxPrice: ctx.query.MaxPrice,
       statusCallback: `https://esp1.kssc.com:${HTTPS_PORT}/api/send/text_status`
     };
 
