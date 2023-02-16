@@ -1,5 +1,4 @@
 const Router = require('koa-router');
-const { koaBody } = require('koa-body');
 
 const { sendText } = require('./routesMsgText.js');
 const { sendTextStatus } = require('./routesMsgTextStatus.js');
