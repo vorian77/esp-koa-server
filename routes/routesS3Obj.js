@@ -1,3 +1,5 @@
+// test migration of folder
+
 // import only required S3 clients and commands
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner")
