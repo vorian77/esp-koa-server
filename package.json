@@ -13,6 +13,8 @@
   "author": "Phyllip Hall",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.272.0",
+    "@aws-sdk/s3-request-presigner": "^3.272.0",
     "@koa/cors": "^4.0.0",
     "@sendgrid/mail": "^7.7.0",
     "axios": "^0.27.2",
