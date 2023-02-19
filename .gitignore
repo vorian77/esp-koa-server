@@ -6,6 +6,8 @@ node_modules
 
 # files
 .env
+.ebextensions
+.gitignore
 app.exe
 app_sandbox.js
 esp_api_log.txt

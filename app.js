@@ -16,6 +16,11 @@ require('dotenv').config({ path: path.join(process.cwd(), '.env')});
 const { apiRouter } = require('./routes/routes.js');
 const { logger } = require('./features/logger.js');
 
+//environment parms
+const HTTPS_PORT = process.env.HTTPS_PORT || 5000; // AWS Elastic Beanstalk default port
+const HTTPS_CERT = process.env.HTTPS_CERT
+const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
+
 // app
 const app = new Koa();
 app
@@ -24,24 +29,22 @@ app
   .use(koaBody())
   .use(json())
   .use(apiRouter.routes())
-  .use(apiRouter.allowedMethods);
-   
-//environment parms
-const HTTPS_PORT = process.env.HTTPS_PORT
-const HTTPS_CERT = process.env.HTTPS_CERT
-const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
+  .use(apiRouter.allowedMethods)
+  .listen(HTTPS_PORT, logStart(HTTPS_PORT));
+
 app.context.espDbUrl = process.env.ESP_DB_URL
 
-// certificates  
-var options = {
-  pfx: fs.readFileSync(HTTPS_CERT),
-  passphrase: HTTPS_CERT_PW
-}
+   
+// // certificates  
+// var options = {
+//   pfx: fs.readFileSync(HTTPS_CERT),
+//   passphrase: HTTPS_CERT_PW
+// }
 
 // listener
-https
-  .createServer(options, app.callback())
-  .listen(HTTPS_PORT, logStart(HTTPS_PORT));
+// https
+//   .createServer(options, app.callback())
+//   .listen(HTTPS_PORT, logStart(HTTPS_PORT));
 
 function logStart(HTTPS_PORT) {
   const runtimeDir = process.cwd();
