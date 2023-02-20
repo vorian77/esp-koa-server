@@ -17,7 +17,7 @@ const { apiRouter } = require('./routes/routes.js');
 const { logger } = require('./features/logger.js');
 
 //environment parms
-const HTTPS_PORT = process.env.HTTPS_PORT || 5000; // AWS Elastic Beanstalk default port
+const HTTPS_PORT = process.env.PORT || 8080; // Google App Engine default port
 const HTTPS_CERT = process.env.HTTPS_CERT
 const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
 

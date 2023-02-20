@@ -4,7 +4,7 @@
   "description": "KidSmart Software ESP internet API",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.272.0",
     "@aws-sdk/s3-request-presigner": "^3.272.0",
+    "@google-cloud/storage": "^6.9.3",
     "@koa/cors": "^4.0.0",
     "@sendgrid/mail": "^7.7.0",
     "axios": "^0.27.2",
