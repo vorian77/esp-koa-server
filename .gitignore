@@ -1,14 +1,11 @@
 # folders
-certificates
-docs
-exe
 node_modules
 
 # files
 .env
 .ebextensions
+.gcloudignore
 .gitignore
-app.exe
 app_sandbox.js
 esp_api_log.txt
 

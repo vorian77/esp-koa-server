@@ -32,7 +32,7 @@ async function transmit(ctx) {
     try {
       console.log(`${functionNameError}.Axios.options...`, options);
       const rtn = await axios(options);
-      console.log(`${functionNameError}.Axios request was successful.`)
+      console.log(`${functionNameError}.Axios request was successful.`);
     if (Array.isArray(rtn.data)) {
         ctx.body = (rtn.data.length == 1) ? rtn.data[0] : rtn.data;
       } else {

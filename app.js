@@ -17,7 +17,7 @@ const { apiRouter } = require('./routes/routes.js');
 const { logger } = require('./features/logger.js');
 
 //environment parms
-const HTTPS_PORT = process.env.PORT || 8080; // Google App Engine default port
+const PORT = process.env.PORT || 8080; // Google App Engine default port
 const HTTPS_CERT = process.env.HTTPS_CERT
 const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
 
@@ -30,25 +30,13 @@ app
   .use(json())
   .use(apiRouter.routes())
   .use(apiRouter.allowedMethods)
-  .listen(HTTPS_PORT, logStart(HTTPS_PORT));
+  .listen(PORT, logStart(PORT));
 
 app.context.espDbUrl = process.env.ESP_DB_URL
 
-   
-// // certificates  
-// var options = {
-//   pfx: fs.readFileSync(HTTPS_CERT),
-//   passphrase: HTTPS_CERT_PW
-// }
-
-// listener
-// https
-//   .createServer(options, app.callback())
-//   .listen(HTTPS_PORT, logStart(HTTPS_PORT));
-
-function logStart(HTTPS_PORT) {
+function logStart(PORT) {
   const runtimeDir = process.cwd();
-  const startMsg = `ESP-API started - Port: ${HTTPS_PORT} - Run time directory: ${runtimeDir}\r\n`;
+  const startMsg = `ESP-API started - Port: ${PORT} - Run time directory: ${runtimeDir}\r\n`;
   logger(startMsg);
 };
 
