@@ -3,7 +3,7 @@ const path = require('path');
 
 function logger(msg) {
   const runtimeDir = process.cwd();
-  const logFile = path.join(runtimeDir, 'esp_api_log.txt');
+  const logFile = path.join(runtimeDir, 'esp_api_log.log');
   msg = `${new Date()}: ${msg}\r\n`;
   //fs.appendFile(logFile, msg, function (err) { if (err) throw err; });
   console.log(msg);

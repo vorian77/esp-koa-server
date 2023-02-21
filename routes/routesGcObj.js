@@ -12,6 +12,12 @@ const bucketName = process.env.GCS_BUCKET;
 //   //ctx.path = ctx.path.slice(ctx.path.indexOf(prefix) + prefix.length);
 // }
 
+module.exports.test = async function (ctx) {
+  const { parmValue } = ctx.query;
+  console.log(`test: ${parmValue}`);
+    ctx.body = {parmValue};
+}
+
 module.exports.objUploadFile = async function (ctx) {
   const { localFilePath, googleCloudStorageId } = ctx.query;
   
@@ -27,7 +33,6 @@ module.exports.objUploadFile = async function (ctx) {
 
 module.exports.objDownloadFile = async function (ctx) {
   const { localFilePath, googleCloudStorageId } = ctx.query;
-  const storage = new Storage();
 
   try {
     await storage.bucket(bucketName).file(googleCloudStorageId).download({ destination: localFilePath });

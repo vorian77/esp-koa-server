@@ -6,8 +6,6 @@ node_modules
 .ebextensions
 .gcloudignore
 .gitignore
-app_sandbox.js
-esp_api_log.txt
 
 # Logs
 logs

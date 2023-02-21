@@ -1,5 +1,6 @@
 const axios = require('axios');    
 const qs = require('qs'); 
+const fetch = require('node-fetch');
 
 const { logger } = require('../features/logger.js');
 
@@ -33,11 +34,16 @@ async function transmit(ctx) {
       console.log(`${functionNameError}.Axios.options...`, options);
       const rtn = await axios(options);
       console.log(`${functionNameError}.Axios request was successful.`);
+      
+      //const rtn = await getResponse(url + '?' + queryParms, ctx.request.method);
+      // const rtn = await getResponse(url, ctx.request.method);
+      // ctx.body = rtn;
+
     if (Array.isArray(rtn.data)) {
         ctx.body = (rtn.data.length == 1) ? rtn.data[0] : rtn.data;
-      } else {
-        ctx.body = rtn.data
-      } 
+    } else {
+      ctx.body = rtn.data
+    } 
 
       ctx.status = rtn.status
         
@@ -69,6 +75,12 @@ async function encryptPassword(ctx) {
   if (ctx.query.password) {
     console.log('has pw');  
   } 
+}
+
+async function getResponse(url, method1) {
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
 }
 
 exports.espConnect = espConnect;
