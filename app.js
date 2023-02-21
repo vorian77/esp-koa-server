@@ -17,7 +17,7 @@ const { apiRouter } = require('./routes/routes.js');
 const { logger } = require('./features/logger.js');
 
 //environment parms
-const PORT = process.env.PORT || 8080; // Google App Engine default port
+const PORT = process.env.PORT || 8000; // Google App Engine default port
 const HTTPS_CERT = process.env.HTTPS_CERT
 const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
 

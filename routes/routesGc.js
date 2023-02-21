@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 
-const { objExists, objUploadFile , objDownloadFile, test } = require('./routesGcObj.js');
+const { objExists, objUploadFile , objDownloadFile, test_echo, test_axios } = require('./routesGcObj.js');
 
 const gcRouter = new Router({ prefix: '/GC' });
 
@@ -10,6 +10,8 @@ const gcRouter = new Router({ prefix: '/GC' });
 //gcRouter.all('/objUpload', async (ctx) => { await objUpload(ctx); });
 gcRouter.all('/objUploadFile', async (ctx) => { await objUploadFile(ctx); });
 gcRouter.all('/objDownloadFile', async (ctx) => { await objDownloadFile(ctx); });
-gcRouter.all('/test', async (ctx) => { await test(ctx); });
+
+gcRouter.all('/test_echo', async (ctx) => { await test_echo(ctx); });
+gcRouter.all('/test_axios', async (ctx) => { await test_axios(ctx); });
 
 exports.gcRouter = gcRouter;
