@@ -36,6 +36,9 @@ async function transmit(ctx) {
       ctx.body = rtn.data
     } 
 
+    // ESP SqlAnywhere does not set the content-length headerS
+    ctx.set('Connection', 'close');
+
     ctx.status = rtn.status
       
   } catch(err) {
