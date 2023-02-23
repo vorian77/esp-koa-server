@@ -44,8 +44,10 @@ async function transmit(ctx) {
   } catch(err) {
     // ESP specific error processing
     console.log(`${functionNameError}.error...`);
-    const body = JSON.stringify(err.response.data) || err.response.statusText || err.message;
-    const status = parseInt(err.response.status);
+    //const body = JSON.stringify(err.response.data) || err.response.statusText || err.message;
+    const body = JSON.stringify(err);
+    //const status = parseInt(err.response.status);
+    const status = 400
     
     const newErr = new Error(body);
     newErr.status = status;
