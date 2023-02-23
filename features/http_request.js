@@ -3,15 +3,14 @@ const qs = require('qs');
 
 module.exports.request = async function (method, url, queryParms) {
   let options;
-  queryParms = qs.stringify(queryParms);
 
   switch(method.toLowerCase()) {
     case 'get':
-      options = { method, url: url + '?' + queryParms }
+      options = { method, url, params: queryParms, timeout: 1000 }
       break;
 
-    default:
-      options = { method, url, data: queryParms }
+    default:  // put, post, delete, patch
+      options = { method, url, data: qs.stringify(queryParms) }
   }
     
   try {
