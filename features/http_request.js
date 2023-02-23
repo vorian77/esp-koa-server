@@ -10,7 +10,7 @@ module.exports.request = async function (method, url, queryParms) {
       break;
 
     default:  // put, post, delete, patch
-      options = { method, url, data: qs.stringify(queryParms) }
+      options = { method, url, data: qs.stringify(queryParms), timeout: 1000 }
   }
     
   try {
