@@ -1,5 +1,3 @@
-// processes all incoming routes to */esp/* to esp1 database web services
-
 const Router = require('koa-router');
 const { espConnect } = require('./routesEspConnect.js');
 

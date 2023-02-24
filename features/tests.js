@@ -1,4 +1,6 @@
-const { request } = require('../features/http_request.js');
+"use strict";
+
+const { http } = require('@vorian77/node_utilities');
 
 module.exports.echo = async function (ctx) {
   const { parmValue } = ctx.query;
@@ -10,7 +12,7 @@ module.exports.http_request = async function (ctx) {
   const method = ctx.query.method;
   const url = ctx.query.url;
   try {
-    const response = await request(method, url, ctx.query);
+    const response = await http(method, url, ctx.query);
     ctx.body = response.statusText;
     ctx.status = response.status;
   } catch(err) {

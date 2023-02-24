@@ -1,4 +1,6 @@
-const { request } = require('../features/http_request.js');
+"use strict";
+
+const { http } = require('@vorian77/node_utilities');
 
 module.exports.espConnect = async function (ctx) {
   await setPath(ctx);
@@ -27,7 +29,7 @@ async function transmit(ctx) {
   const parms = ctx.query;
     
   try {
-    const rtn = await request(method, url, parms);
+    const rtn = await http(method, url, parms);
 
     // ESP specific success processing
     if (Array.isArray(rtn.data)) {
@@ -35,19 +37,14 @@ async function transmit(ctx) {
     } else {
       ctx.body = rtn.data
     } 
-
-    // ESP SqlAnywhere does not set the content-length headerS
-    ctx.set('Connection', 'close');
-
+    
     ctx.status = rtn.status
       
   } catch(err) {
     // ESP specific error processing
     console.log(`${functionNameError}.error...`);
-    //const body = JSON.stringify(err.response.data) || err.response.statusText || err.message;
-    const body = JSON.stringify(err);
-    //const status = parseInt(err.response.status);
-    const status = 400
+    const body = JSON.stringify(err.response.data) || err.response.statusText || err.message;
+    const status = parseInt(err.response.status);
     
     const newErr = new Error(body);
     newErr.status = status;
