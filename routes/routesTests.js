@@ -1,10 +1,13 @@
 const Router = require('koa-router');
 
-const { echo, http_request } = require('../features/tests.js');
+const { testEcho, testHttp, testEmail, testText, testTextStatusCallback } = require('./routesTestsFunctions.js');
 
 const testsRouter = new Router({ prefix: '/tests' });
 
-testsRouter.all('/echo', async (ctx) => { await echo(ctx); });
-testsRouter.all('/http_request', async (ctx) => { await http_request(ctx); });
+testsRouter.all('/echo', async (ctx) => { await testEcho(ctx); });
+testsRouter.all('/http', async (ctx) => { await testHttp(ctx); });
+testsRouter.all('/email', async (ctx) => { await testEmail(ctx); });
+testsRouter.all('/text', async (ctx) => { await testText(ctx); });
+testsRouter.all('/text_status_callback', async (ctx) => { await testTextStatusCallback(ctx); });
 
 exports.testsRouter = testsRouter;

@@ -4,12 +4,6 @@ const fs = require('fs');
 const storage = new Storage();
 const bucketName = process.env.GCS_BUCKET;
 
-// // functions
-// async function objExists(ctx) {
-//   console.log('inside: objExists...')
-//   //const prefix = '/esp';
-//   //ctx.path = ctx.path.slice(ctx.path.indexOf(prefix) + prefix.length);
-// }
 
 module.exports.objUploadFile = async function (ctx) {
   const { localFilePath, googleCloudStorageId } = ctx.query;

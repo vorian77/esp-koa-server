@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/823c43ea-d5cd-4ba0-9308-0faa29713503/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/kssc-esp-api",
+  "appService.deploySubpath": "."
+}

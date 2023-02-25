@@ -45,8 +45,8 @@ async function handleErrors(ctx, next) {
   try {
     await next();
   } catch (err) {
-    console.log('app error...')
     ctx.status = err.status || 500;
-    ctx.body = err.message;
+    ctx.body = err.stack;
+    console.error(err.stack);
   }
 };

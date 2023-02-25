@@ -22,8 +22,6 @@ async function encryptPassword(ctx) {
 }
 
 async function transmit(ctx) {
-  const functionNameError = 'espConnect'
-
   const method = ctx.request.method;
   const url = ctx.espDbUrl + ctx.path;
   const parms = ctx.query;
@@ -31,7 +29,6 @@ async function transmit(ctx) {
   try {
     const rtn = await http(method, url, parms);
 
-    // ESP specific success processing
     if (Array.isArray(rtn.data)) {
         ctx.body = (rtn.data.length == 1) ? rtn.data[0] : rtn.data;
     } else {
@@ -41,8 +38,6 @@ async function transmit(ctx) {
     ctx.status = rtn.status
       
   } catch(err) {
-    // ESP specific error processing
-    console.log(`${functionNameError}.error...`);
     const body = JSON.stringify(err.response.data) || err.response.statusText || err.message;
     const status = parseInt(err.response.status);
     

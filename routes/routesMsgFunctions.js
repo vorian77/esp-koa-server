@@ -1,11 +1,12 @@
-const { espConnect } = require('./routesEspConnect.js');
-const { sendEmail } = require('./routesMsgEmail.js');
+const { espConnect } = require('./routesEspFunctions.js');
+const { sendEmail } = require('@vorian77/node_utilities');
 
 // expected input parms
 // ctx.query.applicantId
 // ctx.query.alertType
+// ctx.query.content // optional - used for message alerts
 
-const sendEmailAlert = async function(ctx) {
+module.exports. sendEmailAlert = async function(ctx) {
   await getApplicantData(ctx);
   await setEmailContent(ctx);
   await sendAlertEmail(ctx);
@@ -13,7 +14,7 @@ const sendEmailAlert = async function(ctx) {
 
 const getApplicantData = async function(ctx) {
   // config espConnect - query.applicantId already set
-  ctx.path = '/esp/ws_cm_ssr_email_alert_data'
+  ctx.path = '/ws_cm_ssr_email_alert_data'
   await espConnect(ctx);
 
   // transfer response to query
@@ -35,7 +36,18 @@ const setEmailContent = async function(ctx) {
 }
 
 const sendAlertEmail = async function(ctx) {
-  await sendEmail(ctx);
-}
+  const msg = {
+    emailToList: ctx.query.emailToList,
+    emailFrom: 'alerts@TheAppFactory.com',
+    emailSubject: ctx.query.emailSubject,
+    emailBody: ctx.query.emailBody
+  }
 
-exports.sendEmailAlert = sendEmailAlert;
+  try {
+    const response = await sendEmail(msg);
+    ctx.body = response.body;
+    ctx.status = response.status;
+  } catch(err) {
+    throw err;
+  }
+}
