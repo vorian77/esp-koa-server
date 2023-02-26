@@ -1,5 +1,5 @@
-const { espConnect } = require('./routesEspFunctions.js');
-const { sendEmail } = require('@vorian77/node_utilities');
+const { espConnect } = require('@vorian77/node_utilities');
+const sendEmail = require('../utilities/msgMail.js');
 
 // expected input parms
 // ctx.query.applicantId

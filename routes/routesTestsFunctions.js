@@ -1,6 +1,9 @@
 "use strict";
 
-const { espConnect, http, sendEmail, sendText } = require('@vorian77/node_utilities');
+const { http } = require('@vorian77/node_utilities');
+const espConnect = require('../utilities/espConnect.js');
+const sendEmail = require('../utilities/msgMail.js');
+const sendText = require('../utilities/msgText.js');
 
 module.exports.testEcho = async function (ctx) {
   console.log(`parm echo: ${JSON.stringify(ctx.query)}`);
@@ -9,16 +12,9 @@ module.exports.testEcho = async function (ctx) {
 
 module.exports.testEspConnect = async function (ctx) {
   const method = ctx.query.method;
-  const espfunction = ctx.query.function;
+  const espFunction = ctx.query.function;
   const espParms = ctx.query;
-  
-  try {
-    const response = await espConnect(method, espfunction, espParms);
-    ctx.status = response.status;
-    ctx.body = response.body;
-  } catch(err) {
-    throw err;
-  }
+  await espConnect (ctx, method, espFunction, espParms);
 }
 
 module.exports.testHttp = async function (ctx) {
@@ -66,17 +62,15 @@ module.exports.testText = async function(ctx) {
 }
 
 module.exports.testTextStatusCallback = async function (ctx) {
-  ctx.query.To = ctx.request.body.To;
-  ctx.query.SmsSid = ctx.request.body.SmsSid;
-  ctx.query.ErrorCode = ctx.request.body.ErrorCode;
-  ctx.query.SmsStatus = ctx.request.body.SmsStatus;
-  ctx.query.MessageStatus = ctx.request.body.MessageStatus;
-
-  try { 
-    ctx.path = '/ws_sms_update'
-    await espConnect(ctx);
-  } catch(err) {
-    throw err;
+  const method = ctx.request.method;
+  const espFunction = 'ws_sms_update';
+  const espParms = {
+    To: ctx.request.body.To,
+    SmsSid: ctx.request.body.SmsSid,
+    ErrorCode: ctx.request.body.ErrorCode,
+    SmsStatus: ctx.request.body.SmsStatus,
+    MessageStatus: ctx.request.body.MessageStatus
   }
+  await espConnect (ctx, method, espFunction, espParms);
 }
 
