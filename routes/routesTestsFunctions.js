@@ -1,11 +1,24 @@
 "use strict";
 
-const { http, sendEmail, sendText } = require('@vorian77/node_utilities');
-const { espConnect } = require('./routesEspFunctions.js');
+const { espConnect, http, sendEmail, sendText } = require('@vorian77/node_utilities');
 
 module.exports.testEcho = async function (ctx) {
   console.log(`parm echo: ${JSON.stringify(ctx.query)}`);
   ctx.body = ctx.query;
+}
+
+module.exports.testEspConnect = async function (ctx) {
+  const method = ctx.query.method;
+  const espfunction = ctx.query.function;
+  const espParms = ctx.query;
+  
+  try {
+    const response = await espConnect(method, espfunction, espParms);
+    ctx.status = response.status;
+    ctx.body = response.body;
+  } catch(err) {
+    throw err;
+  }
 }
 
 module.exports.testHttp = async function (ctx) {
