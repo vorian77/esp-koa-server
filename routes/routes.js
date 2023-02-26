@@ -7,7 +7,7 @@ const { testsRouter } = require('./routesTests.js');
 
 const apiRouter = new Router();
 
-apiRouter.all('/', (ctx) => { ctx.body = 'Hello from the KidSmart ESP client API!'});
+apiRouter.all('/', (ctx) => { ctx.body = 'Hello from the KidSmart ESP API (client)!'});
 
 const nestedRoutes = [espRouter, msgRouter, gcRouter, testsRouter];
 for (var router of nestedRoutes) {
