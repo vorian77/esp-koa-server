@@ -18,8 +18,6 @@ const { logger } = require('./utilities/logger.js');
 
 //environment parms
 const PORT = process.env.PORT || 8000; // Google App Engine default port
-const HTTPS_CERT = process.env.HTTPS_CERT
-const HTTPS_CERT_PW = process.env.HTTPS_CERT_PW
 
 // app
 const app = new Koa();
@@ -31,8 +29,6 @@ app
   .use(apiRouter.routes())
   .use(apiRouter.allowedMethods)
   .listen(PORT, logStart(PORT));
-
-app.context.espDbUrl = process.env.ESP_DB_URL
 
 function logStart(PORT) {
   const runtimeDir = process.cwd();
