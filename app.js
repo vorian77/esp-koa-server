@@ -14,7 +14,7 @@ require('dotenv').config({ path: path.join(process.cwd(), '.env')});
 
 // resources - application
 const { apiRouter } = require('./routes/routes.js');
-const { logger } = require('./utilities/logger.js');
+const { logger } = require('./util/logger.js');
 
 //environment parms
 const PORT = process.env.PORT || 8000; // Google App Engine default port

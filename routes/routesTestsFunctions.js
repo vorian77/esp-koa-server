@@ -1,8 +1,8 @@
 "use strict";
 
-const http = require('../utilities/http.js');
-const sendEmail = require('../utilities/msgMail.js');
-const sendText = require('../utilities/msgText.js');
+const http = require('../util/http.js');
+const sendEmail = require('../util/msgMail.js');
+const sendText = require('../util/msgText.js');
 
 module.exports.testEcho = async function (ctx) {
   console.log(`parm echo: ${JSON.stringify(ctx.query)}`);
@@ -14,7 +14,7 @@ module.exports.testHttp = async function (ctx) {
   const url = ctx.query.url;
 
   try {
-    const response = await http(method, url, ctx.query);
+    const response = await http(method, url, ctx);
     ctx.body = response.statusText;
     ctx.status = response.status;
   } catch(err) {
@@ -51,18 +51,5 @@ module.exports.testText = async function(ctx) {
   } catch(err) {
     throw err;
   }
-}
-
-module.exports.testTextStatusCallback = async function (ctx) {
-  const method = ctx.request.method;
-  const espFunction = 'ws_sms_update';
-  const espParms = {
-    To: ctx.request.body.To,
-    SmsSid: ctx.request.body.SmsSid,
-    ErrorCode: ctx.request.body.ErrorCode,
-    SmsStatus: ctx.request.body.SmsStatus,
-    MessageStatus: ctx.request.body.MessageStatus
-  }
-  await espConnect (ctx, method, espFunction, espParms);
 }
 

@@ -1,8 +1,8 @@
 // ESP Self-Service Registration - Send Email Alert
 
 require('dotenv').config();
-const http = require('../utilities/http.js');
-const sendEmail = require('../utilities/msgMail.js');
+const http = require('../util/http.js');
+const sendEmail = require('../util/msgMail.js');
 
 // expected input parms
 // ctx.query.applicantId
@@ -20,7 +20,7 @@ const getApplicantData = async function(ctx) {
   const url = process.env.ESP_DB_URL + '/esp/ws_cm_ssr_email_alert_data';
 
   try {
-    const response = await http(method, url, ctx.query);
+    const response = await http(method, url, ctx);
     ctx.query.applicantName = response.data.applicant;
     ctx.query.emailToList = response.data.emailAddresses;
   } catch (err) {
