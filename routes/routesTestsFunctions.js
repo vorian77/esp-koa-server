@@ -1,20 +1,12 @@
 "use strict";
 
-const { http } = require('@vorian77/node_utilities');
-const espConnect = require('../utilities/espConnect.js');
+const http = require('../utilities/http.js');
 const sendEmail = require('../utilities/msgMail.js');
 const sendText = require('../utilities/msgText.js');
 
 module.exports.testEcho = async function (ctx) {
   console.log(`parm echo: ${JSON.stringify(ctx.query)}`);
   ctx.body = ctx.query;
-}
-
-module.exports.testEspConnect = async function (ctx) {
-  const method = ctx.query.method;
-  const espFunction = ctx.query.function;
-  const espParms = ctx.query;
-  await espConnect (ctx, method, espFunction, espParms);
 }
 
 module.exports.testHttp = async function (ctx) {

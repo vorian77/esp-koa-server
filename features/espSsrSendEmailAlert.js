@@ -1,4 +1,7 @@
-const { espConnect } = require('@vorian77/node_utilities');
+// ESP Self-Service Registration - Send Email Alert
+
+require('dotenv').config();
+const http = require('../utilities/http.js');
 const sendEmail = require('../utilities/msgMail.js');
 
 // expected input parms
@@ -6,20 +9,26 @@ const sendEmail = require('../utilities/msgMail.js');
 // ctx.query.alertType
 // ctx.query.content // optional - used for message alerts
 
-module.exports. sendEmailAlert = async function(ctx) {
+module.exports = async function(ctx) {
   await getApplicantData(ctx);
   await setEmailContent(ctx);
-  await sendAlertEmail(ctx);
+  await sendMsg(ctx);
 }
 
 const getApplicantData = async function(ctx) {
-  // config espConnect - query.applicantId already set
-  ctx.path = '/ws_cm_ssr_email_alert_data'
-  await espConnect(ctx);
+  method = 'get';
+  const url = process.env.ESP_DB_URL + '/esp/ws_cm_ssr_email_alert_data';
 
-  // transfer response to query
-  ctx.query.applicantName = ctx.body.applicant;
-  ctx.query.emailToList = ctx.body.emailAddresses;
+  try {
+    const response = await http(method, url, ctx.query);
+    ctx.query.applicantName = response.data.applicant;
+    ctx.query.emailToList = response.data.emailAddresses;
+  } catch (err) {
+    console.error(`getApplicantData error...\nURL: ${url} \nQuery Params: ${JSON.stringify(ctx.query)}`);
+    const newErr = new Error(err.message);
+    newErr.status = err.status;
+    throw newErr;
+  }
 }
 
 const setEmailContent = async function(ctx) {
@@ -35,7 +44,7 @@ const setEmailContent = async function(ctx) {
   ctx.query.emailBody = '<!DOCTYPE html> <html> <body>' +  ctx.query.emailBody + '</body> </html>';
 }
 
-const sendAlertEmail = async function(ctx) {
+const sendMsg = async function(ctx) {
   const msg = {
     emailToList: ctx.query.emailToList,
     emailFrom: 'alerts@TheAppFactory.com',
