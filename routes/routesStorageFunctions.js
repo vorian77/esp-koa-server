@@ -1,9 +1,8 @@
 // Azure
+
 require("dotenv").config();
 const { DefaultAzureCredential } = require('@azure/identity');
 const { BlobServiceClient } = require("@azure/storage-blob");
-
-const userAssignedManagedIdentityClientId = 'a5106c13-3d5f-4189-8739-374efd9933be';
 
 // account name
 const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
@@ -17,8 +16,9 @@ const blobServiceClient = new BlobServiceClient(
   `https://${accountName}.blob.core.windows.net`,
   new DefaultAzureCredential()
 );
-const containerClient = blobServiceClient.getContainerClient(containerName);
 
+// create container client using blobservice
+const containerClient = blobServiceClient.getContainerClient(containerName);
 
 module.exports.blobList = async function (ctx) {
   let list =[];
@@ -59,14 +59,6 @@ module.exports.blobUploadText = async function (ctx) {
 }
 
 module.exports.blobUploadFilePath = async function (ctx) {
-  // containerName: string
-  // blobName: string, includes file extension if provided
-  // localFileWithPath: fully qualified path and file name
-  // uploadOptions: {
-  //   metadata: { reviewer: 'john', reviewDate: '2022-04-01' }, 
-  //   tags: {project: 'xyz', owner: 'accounts-payable'}
-  // }
-
   const blobName = ctx.query.name;
   const path = ctx.query.path;
   const uploadOptions = {};
@@ -80,3 +72,20 @@ module.exports.blobUploadFilePath = async function (ctx) {
   ctx.body = { requestId: uploadBlobResponse.requestId};
 }
 
+module.exports.blobDelete = async function (ctx) {
+  const blobName = ctx.query.name;
+
+  // Delete the base blob and all of its snapshots.
+  const options = { deleteSnapshots: 'include' };
+
+  // Create blob client from container client
+  const blockBlobClient = await containerClient.getBlockBlobClient(blobName);
+
+  // delete blob
+  const deleteBlobResponse = await blockBlobClient.deleteIfExists(options);
+
+  console.log(`deleted blob ${blobName}`);
+
+  //ctx.body = { requestId: uploadBlobResponse.requestId};
+  ctx.body='done';
+}
