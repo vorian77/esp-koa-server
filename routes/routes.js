@@ -6,7 +6,8 @@ const { testsRouter } = require('./routesTests.js');
 
 const apiRouter = new Router();
 
-apiRouter.all('/', (ctx) => { ctx.body = 'Hello from the KidSmart API-Utilities!'});
+const PORT = process.env.PORT;
+apiRouter.all('/', (ctx) => { ctx.body = `Hello from the KidSmart API-Utilities (port: ${PORT})!`});
 
 const nestedRoutes = [featuresRouter, storageRouter, testsRouter];
 for (var router of nestedRoutes) {

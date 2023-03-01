@@ -17,7 +17,7 @@ const { apiRouter } = require('./routes/routes.js');
 const { logger } = require('./util/logger.js');
 
 //environment parms
-const PORT = process.env.PORT || 8000; // Google App Engine default port
+const PORT = process.env.PORT;
 
 // app
 const app = new Koa();
@@ -30,9 +30,9 @@ app
   .use(apiRouter.allowedMethods)
   .listen(PORT, logStart(PORT));
 
-function logStart(PORT) {
+function logStart(port) {
   const runtimeDir = process.cwd();
-  const startMsg = `ESP-API started - Port: ${PORT} - Run time directory: ${runtimeDir}\r\n`;
+  const startMsg = `ESP-API started - Port: ${port} - Run time directory: ${runtimeDir}\r\n`;
   logger(startMsg);
 };
 
