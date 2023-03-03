@@ -13,9 +13,8 @@
   "author": "Phyllip Hall",
   "license": "MIT",
   "dependencies": {
-    "@azure/identity": "^3.1.3",
-    "@azure/storage-blob": "^12.13.0",
-    "@google-cloud/storage": "^6.9.3",
+    "@aws-sdk/client-s3": "^3.282.0",
+    "@aws-sdk/s3-request-presigner": "^3.282.0",
     "@koa/cors": "^4.0.0",
     "@sendgrid/mail": "^7.7.0",
     "axios": "^1.3.4",
@@ -24,7 +23,7 @@
     "koa-body": "^6.0.1",
     "koa-json": "^2.0.2",
     "koa-router": "^12.0.0",
-    "node-fetch": "^2.6.9",
+    "request": "^2.88.2",
     "twilio": "^4.8.0"
   },
   "devDependencies": {

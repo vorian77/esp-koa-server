@@ -1,91 +1,100 @@
-// Azure
+// AWS-S3
 
 require("dotenv").config();
-const { DefaultAzureCredential } = require('@azure/identity');
-const { BlobServiceClient } = require("@azure/storage-blob");
+const { AWS_KEY_ACCESS, AWS_KEY_SECRET, AWS_REGION, AWS_BUCKET } = process.env;
+const s3Parms = {
+  credentials: {
+      accessKeyId: AWS_KEY_ACCESS,
+      secretAccessKey: AWS_KEY_SECRET
+  },
+  region: AWS_REGION
+};
+const { S3Client } = require("@aws-sdk/client-s3");
+const s3 = new S3Client(s3Parms);
 
-// account name
-const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
-if (!accountName) throw Error('Azure Storage accountName not found.');
 
-// image container
-const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
+module.exports.objDelete = async function(ctx) {
+  const { DeleteObjectCommand } = require("@aws-sdk/client-s3"); 
+  const bucketParams = { Bucket: AWS_BUCKET, Key: ctx.query.s3Key };
 
-// create blob service and container client
-const blobServiceClient = new BlobServiceClient(
-  `https://${accountName}.blob.core.windows.net`,
-  new DefaultAzureCredential()
-);
-
-// create container client using blobservice
-const containerClient = blobServiceClient.getContainerClient(containerName);
-
-module.exports.blobList = async function (ctx) {
-  let list =[];
-    
-  for await (const blob of containerClient.listBlobsFlat()) {
-    // Get Blob Client from name, to get the URL
-    const tempBlockBlobClient = containerClient.getBlockBlobClient(blob.name);
-
-    // Display blob name and URL
-    list.push(blob.name);
+  try {
+    const data = await s3.send(new DeleteObjectCommand(bucketParams));
+    console.log("Success. Object deleted.", data);
+    ctx.body = data;
+  } catch (err) {
+    console.log("Error", err);
   }
+};
+
+module.exports.objList = async function(ctx) {
+  const { ListObjectsV2Command } = require("@aws-sdk/client-s3");
+  const command = new ListObjectsV2Command({
+    Bucket: AWS_BUCKET
+  });
+
+  try {
+    let isTruncated = true;
+
+    console.log("Your bucket contains the following objects:\n")
+    let contents = "";
+
+    while (isTruncated) {
+      const { Contents, IsTruncated, NextContinuationToken } = await s3.send(command);
+      const contentsList = Contents.map((c) => ` • ${c.Key}`).join("\n");
+      contents += contentsList + "\n";
+      isTruncated = IsTruncated;
+      command.input.ContinuationToken = NextContinuationToken;
+    }
+    console.log(contents);
+    ctx.body = contents;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+module.exports.objUploadText = async function(ctx) {
+  const { PutObjectCommand } = require("@aws-sdk/client-s3"); 
   
-  ctx.body = { blobs: list };
-}
+  const command = new PutObjectCommand({ 
+    Bucket: AWS_BUCKET, 
+    Key: ctx.query.s3Key,
+    Body: ctx.query.text
+  });
 
-module.exports.blobUploadText = async function (ctx) {
-  // upload blob - text
-  const blobName = ctx.query.name;
-  const content = ctx.query.content;
-  
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  const uploadBlobResponse = await blockBlobClient.upload(content, content.length);
-  console.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
+  try {
+    const response = await s3.send(command);
+    console.log(response);
+    ctx.body = response;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
 
-  ctx.body = { requestId: uploadBlobResponse.requestId};
-}
+module.exports.objUrlDownload = async function(ctx) {
+  const { GetObjectCommand } = require("@aws-sdk/client-s3");
+  const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+      
+  const { s3key } = ctx.query;
 
-module.exports.blobUploadText = async function (ctx) {
-  // upload blob - text
-  const blobName = ctx.query.name;
-  const content = ctx.query.content;
-  
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  const uploadBlobResponse = await blockBlobClient.upload(content, content.length);
-  console.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
+  //import { HttpRequest } from "@aws-sdk/protocol-http";
 
-  ctx.body = { requestId: uploadBlobResponse.requestId};
-}
+  const command = new GetObjectCommand({ Bucket: AWS_BUCKET, Key: s3key });
+  const preSignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
 
-module.exports.blobUploadFilePath = async function (ctx) {
-  const blobName = ctx.query.name;
-  const path = ctx.query.path;
-  const uploadOptions = {};
+  console.log('Presigned URL: ', preSignedUrl );
+  ctx.body = preSignedUrl ;
+};
 
-  // create blob client from container client
-  const blockBlobClient = await containerClient.getBlockBlobClient(blobName);
 
-  // upload file to blob storage
-  const uploadBlobResponse = await blockBlobClient.uploadFile(path, uploadOptions);
+module.exports.objUrlUpload = async function(ctx) {
+  const { PutObjectCommand } = require("@aws-sdk/client-s3");
+  const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+      
+  const {s3key, contentType} = ctx.query;
 
-  ctx.body = { requestId: uploadBlobResponse.requestId};
-}
+  const command = new PutObjectCommand({Bucket: AWS_BUCKET, Key: s3key });
 
-module.exports.blobDelete = async function (ctx) {
-  const blobName = ctx.query.name;
-
-  // Delete the base blob and all of its snapshots.
-  const options = { deleteSnapshots: 'include' };
-
-  // Create blob client from container client
-  const blockBlobClient = await containerClient.getBlockBlobClient(blobName);
-
-  // delete blob
-  const deleteBlobResponse = await blockBlobClient.deleteIfExists(options);
-
-  console.log(`deleted blob ${blobName}`);
-
-  //ctx.body = { requestId: uploadBlobResponse.requestId};
-  ctx.body='done';
-}
+  const preSignedUrl  = await getSignedUrl(s3, command, { expiresIn: 3600 }); // expires in seconds
+  console.log('Presigned URL: ', preSignedUrl );
+  ctx.body = preSignedUrl ;
+};
