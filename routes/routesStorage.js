@@ -1,14 +1,18 @@
 const Router = require('koa-router');
 
-const { objDelete, objList, objUploadText, objUrlDownload, objUrlUpload } = require('./routesStorageFunctions.js');
+const { imgDelete, imgList, imgUploadText, imgUrlDownload, imgUrlUpload } = require('./routesStorageFunctions.js');
+const { imgProperties, imgResize } = require('../features/imageResize.js');
 
 const storageRouter = new Router({ prefix: '/storage' });
 
-storageRouter.all('/obj_delete', async (ctx) => { await objDelete(ctx); });
-storageRouter.all('/obj_list', async (ctx) => { await objList(ctx); });
-storageRouter.all('/obj_upload_text', async (ctx) => { await objUploadText(ctx); });
-storageRouter.all('/obj_url_download', async (ctx) => { await objUrlDownload(ctx); });
-storageRouter.all('/obj_url_upload', async (ctx) => { await objUrlUpload(ctx); });
+storageRouter.all('/img_delete', async (ctx) => { await imgDelete(ctx); });
+storageRouter.all('/img_list', async (ctx) => { await imgList(ctx); });
+storageRouter.all('/img_upload_text', async (ctx) => { await imgUploadText(ctx); });
+storageRouter.all('/img_url_download', async (ctx) => { await imgUrlDownload(ctx); });
+storageRouter.all('/img_url_upload', async (ctx) => { await imgUrlUpload(ctx); });
+
+storageRouter.all('/img_properties', async (ctx) => { await imgProperties(ctx); });
+storageRouter.all('/img_resize', async (ctx) => { await imgResize(ctx); });
 
 exports.storageRouter = storageRouter;
 

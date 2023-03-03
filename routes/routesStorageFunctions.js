@@ -13,7 +13,7 @@ const { S3Client } = require("@aws-sdk/client-s3");
 const s3 = new S3Client(s3Parms);
 
 
-module.exports.objDelete = async function(ctx) {
+module.exports.imgDelete = async function(ctx) {
   const { DeleteObjectCommand } = require("@aws-sdk/client-s3"); 
   const bucketParams = { Bucket: AWS_BUCKET, Key: ctx.query.s3Key };
 
@@ -26,7 +26,7 @@ module.exports.objDelete = async function(ctx) {
   }
 };
 
-module.exports.objList = async function(ctx) {
+module.exports.imgList = async function(ctx) {
   const { ListObjectsV2Command } = require("@aws-sdk/client-s3");
   const command = new ListObjectsV2Command({
     Bucket: AWS_BUCKET
@@ -52,7 +52,7 @@ module.exports.objList = async function(ctx) {
   }
 }
 
-module.exports.objUploadText = async function(ctx) {
+module.exports.imgUploadText = async function(ctx) {
   const { PutObjectCommand } = require("@aws-sdk/client-s3"); 
   
   const command = new PutObjectCommand({ 
@@ -70,13 +70,10 @@ module.exports.objUploadText = async function(ctx) {
   }
 };
 
-module.exports.objUrlDownload = async function(ctx) {
+module.exports.imgUrlDownload = async function(ctx) {
   const { GetObjectCommand } = require("@aws-sdk/client-s3");
   const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-      
   const { s3key } = ctx.query;
-
-  //import { HttpRequest } from "@aws-sdk/protocol-http";
 
   const command = new GetObjectCommand({ Bucket: AWS_BUCKET, Key: s3key });
   const preSignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
@@ -85,16 +82,14 @@ module.exports.objUrlDownload = async function(ctx) {
   ctx.body = preSignedUrl ;
 };
 
-
-module.exports.objUrlUpload = async function(ctx) {
+module.exports.imgUrlUpload = async function(ctx) {
   const { PutObjectCommand } = require("@aws-sdk/client-s3");
-  const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-      
+  const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");      
   const {s3key, contentType} = ctx.query;
 
   const command = new PutObjectCommand({Bucket: AWS_BUCKET, Key: s3key });
 
-  const preSignedUrl  = await getSignedUrl(s3, command, { expiresIn: 3600 }); // expires in seconds
+  const preSignedUrl  = await getSignedUrl(s3, command, { expiresIn: 3600 });
   console.log('Presigned URL: ', preSignedUrl );
   ctx.body = preSignedUrl ;
 };
