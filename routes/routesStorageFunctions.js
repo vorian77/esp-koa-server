@@ -15,14 +15,14 @@ const s3 = new S3Client(s3Parms);
 
 module.exports.imgDelete = async function(ctx) {
   const { DeleteObjectCommand } = require("@aws-sdk/client-s3"); 
-  const bucketParams = { Bucket: AWS_BUCKET, Key: ctx.query.s3Key };
+  const bucketParams = { Bucket: AWS_BUCKET, Key: ctx.query.storageKey };
 
   try {
     const data = await s3.send(new DeleteObjectCommand(bucketParams));
-    console.log("Success. Object deleted.", data);
-    ctx.body = data;
+    console.log(data);
+    ctx.body = { data };
   } catch (err) {
-    console.log("Error", err);
+    throw err;
   }
 };
 
@@ -33,22 +33,20 @@ module.exports.imgList = async function(ctx) {
   });
 
   try {
-    let isTruncated = true;
+    let results = [];
 
-    console.log("Your bucket contains the following objects:\n")
-    let contents = "";
-
-    while (isTruncated) {
-      const { Contents, IsTruncated, NextContinuationToken } = await s3.send(command);
-      const contentsList = Contents.map((c) => ` • ${c.Key}`).join("\n");
-      contents += contentsList + "\n";
-      isTruncated = IsTruncated;
-      command.input.ContinuationToken = NextContinuationToken;
+    const { Contents, IsTruncated, NextContinuationToken } = await s3.send(command);
+    
+    let i = 0;
+    while (i < Contents.length) {
+      results.push(Contents[i].Key);
+      i++;
     }
-    console.log(contents);
-    ctx.body = contents;
+
+    console.log(results);
+    ctx.body = {results};
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 }
 
@@ -57,39 +55,39 @@ module.exports.imgUploadText = async function(ctx) {
   
   const command = new PutObjectCommand({ 
     Bucket: AWS_BUCKET, 
-    Key: ctx.query.s3Key,
+    Key: ctx.query.storageKey,
     Body: ctx.query.text
   });
 
   try {
     const response = await s3.send(command);
     console.log(response);
-    ctx.body = response;
+    ctx.body = { response };
   } catch (err) {
-    console.log("Error", err);
+    throw err;
   }
 };
 
 module.exports.imgUrlDownload = async function(ctx) {
   const { GetObjectCommand } = require("@aws-sdk/client-s3");
   const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-  const { s3key } = ctx.query;
+  const { storageKey } = ctx.query;
 
-  const command = new GetObjectCommand({ Bucket: AWS_BUCKET, Key: s3key });
-  const preSignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  const command = new GetObjectCommand({ Bucket: AWS_BUCKET, Key: storageKey });
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
 
-  console.log('Presigned URL: ', preSignedUrl );
-  ctx.body = preSignedUrl ;
+  console.log('Presigned URL: ', url );
+  ctx.body = { url } ;
 };
 
 module.exports.imgUrlUpload = async function(ctx) {
   const { PutObjectCommand } = require("@aws-sdk/client-s3");
   const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");      
-  const {s3key, contentType} = ctx.query;
+  const { storageKey, contentType } = ctx.query;
 
-  const command = new PutObjectCommand({Bucket: AWS_BUCKET, Key: s3key });
+  const command = new PutObjectCommand({ Bucket: AWS_BUCKET, Key: storageKey });
 
-  const preSignedUrl  = await getSignedUrl(s3, command, { expiresIn: 3600 });
-  console.log('Presigned URL: ', preSignedUrl );
-  ctx.body = preSignedUrl ;
+  const url  = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  console.log('Presigned URL: ', url );
+  ctx.body = { url };
 };
