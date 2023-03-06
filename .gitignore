@@ -6,6 +6,8 @@ node_modules
 .ebextensions
 .gcloudignore
 .gitignore
+*.jpg
+*.png
 
 # Logs
 logs
