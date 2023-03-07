@@ -23,7 +23,7 @@ module.exports.sendEmail = async function(ctx) {
 module.exports.sendText = async function(ctx) {
   const phoneNbrTo = ctx.query.phoneNbrTo;
   const body = ctx.query.body;
-  const maxPrice = ctx.query.MaxPrice;
+  const maxPrice = ctx.query.MaxPrice || process.env.TWILIO_MAXPRICE;
   
   try {
     const response = await sendText(phoneNbrTo, body, maxPrice);
