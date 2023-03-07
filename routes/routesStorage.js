@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 
 const { imgDelete, imgList, imgUploadText, imgUrlDownload, imgUrlUpload, imgUpload } = require('./routesStorageFunctions.js');
-const { imgProperties, imgResize } = require('../features/imageResize.js');
+const { imgProperties, imgResize } = require('./routesStorageFunctionsImage.js');
 
 const storageRouter = new Router({ prefix: '/storage' });
 

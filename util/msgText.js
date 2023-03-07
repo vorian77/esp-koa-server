@@ -4,21 +4,20 @@ require('dotenv').config();
 const Twilio = require('twilio');
 
 module.exports = async function(phoneNbrTo, textBody, textMaxPrice) {  
-  // environmental parms
-  const accountSid = process.env.TWILIO_ACCT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const phoneNbrFrom = process.env.TWILIO_PHONE_NBR;
-  const textStatusCallback = process.env.TWILIO_STATUS_CALLBACK;
-
-  const twilio = new Twilio(accountSid, authToken);
+  const { TWILIO_ACCT_SID, 
+    TWILIO_AUTH_TOKEN, 
+    TWILIO_PHONE_NBR, 
+    TWILIO_STATUS_CALLBACK,
+    TWILIO_MAXPRICE } = process.env;
+  const twilio = new Twilio(TWILIO_ACCT_SID, TWILIO_AUTH_TOKEN);
   
   // parms
   const parms = {
-    from: phoneNbrFrom,
+    from: TWILIO_PHONE_NBR,
     to: phoneNbrTo,
     body: textBody,
-    MaxPrice: textMaxPrice || process.env.TWILIO_MAXPRICE,
-    statusCallback: textStatusCallback
+    MaxPrice: textMaxPrice || TWILIO_MAXPRICE,
+    statusCallback: TWILIO_STATUS_CALLBACK
   };
 
   try {
