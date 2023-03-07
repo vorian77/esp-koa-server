@@ -16,7 +16,9 @@ module.exports.sendEmail = async function(ctx) {
     ctx.body = response.body;
     ctx.status = response.status;
     } catch(err) {
-      throw err;
+      const newErr = new Error(err.message);
+      newErr.status = err.status || 500;
+      throw newErr;
     }
 }
 

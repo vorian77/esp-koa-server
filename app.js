@@ -42,7 +42,10 @@ async function handleErrors(ctx, next) {
     await next();
   } catch (err) {
     ctx.status = err.status || 500;
-    ctx.body = err.stack;
     console.error(err.stack);
+    ctx.body = { 
+      status: ctx.status,
+      message: err.stack 
+    };
   }
 };
