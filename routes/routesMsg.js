@@ -1,7 +1,11 @@
 const Router = require('koa-router');
 
 const { sendEmail, sendText } = require('./routesMsgFunctions.js');
+<<<<<<< HEAD
 const sendEmailAlertEsp = require('./routesMsgFunctionsEmailAlertEsp.js');
+=======
+const sendEmailAlertEsp = require('./routesMsgFunctionsEspEmailAlert.js');
+>>>>>>> 95a641a474a471a155c8bc6ca5d840f20d6cd373
 
 const msgRouter = new Router({ prefix: '/msg' });
 
