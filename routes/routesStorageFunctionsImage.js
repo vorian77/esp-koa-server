@@ -1,3 +1,5 @@
+"use strict";
+
 const sharp = require("sharp");
 
 module.exports.imgProperties = async function(ctx) {
