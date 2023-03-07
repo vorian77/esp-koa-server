@@ -5,11 +5,11 @@ const sendText = require('../util/msgText.js');
 
 module.exports.sendEmail = async function(ctx) {
   const msg = {
-    emailToList: ctx.query.emailToList,
-    emailFrom: 'alerts@TheAppFactory.com',
-    emailSubject: ctx.query.emailSubject,
-    emailBody: ctx.query.emailBody
-  }
+    emailToList: ctx.request.body.emailToList,
+    emailSubject: ctx.request.body.emailSubject,
+    emailBody: ctx.request.body.emailBody,
+    emailFrom: 'alerts@TheAppFactory.com'
+  };
   
   try {
     const response = await sendEmail(msg);
@@ -21,9 +21,9 @@ module.exports.sendEmail = async function(ctx) {
 }
 
 module.exports.sendText = async function(ctx) {
-  const phoneNbrTo = ctx.query.phoneNbrTo;
-  const body = ctx.query.body;
-  const maxPrice = ctx.query.MaxPrice || process.env.TWILIO_MAXPRICE;
+  const phoneNbrTo = ctx.request.body.phoneNbrTo;
+  const body = ctx.request.body.body;
+  const maxPrice = ctx.request.body.MaxPrice || process.env.TWILIO_MAXPRICE;
   
   try {
     const response = await sendText(phoneNbrTo, body, maxPrice);
